@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WEBSITE - ANTI CURRUPTION</title>
+<style>
+  /* Matrix binary theme */
+  :root{
+    --bg:#000;
+    --neon:#00ff6a;
+    --muted:#063214;
+    --card:#07120a;
+    --accent:#00aaff;
+    --mono: "Courier New", monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:var(--mono);background:radial-gradient(ellipse at top,#001100 0%, #000 60%);color:var(--neon)}
+  /* matrix background lines */
+  body::before{
+    content:"";
+    position:fixed;inset:0;z-index:0;opacity:0.06;
+    background-image:linear-gradient(rgba(0,255,106,0.015) 1px, transparent 1px), 
+                      linear-gradient(90deg, rgba(0,255,106,0.015) 1px, transparent 1px);
+    background-size:100% 18px, 18px 100%;
+    pointer-events:none;
+  }
+  .container{position:relative;z-index:1;max-width:1100px;margin:20px auto;padding:18px;}
+  header.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-radius:8px;background:rgba(0,0,0,0.5);border:1px solid rgba(0,255,106,0.08);margin-bottom:18px}
+  .brand{font-weight:700;font-size:18px}
+  .nav-buttons{display:flex;gap:8px}
+  .nav-buttons button{background:transparent;border:1px solid rgba(0,255,106,0.12);color:var(--neon);padding:8px 12px;border-radius:6px;cursor:pointer}
+  .nav-buttons button:hover{background:rgba(0,255,106,0.06)}
+  .main-card{background:rgba(0,0,0,0.6);padding:20px;border-radius:8px;border:1px solid rgba(0,255,106,0.04)}
+  h1,h2,h3{margin:6px 0 12px 0}
+  p{line-height:1.4;color: #bfffd3}
+  .hidden{display:none}
+  /* Auth box */
+  .auth-grid{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start}
+  .box{background:rgba(0,0,0,0.55);padding:18px;border-radius:8px;border:1px solid rgba(0,255,106,0.06);min-width:260px}
+  input, select, textarea{width:100%;padding:10px;margin:8px 0;border-radius:6px;border:1px solid rgba(0,255,106,0.06);background:transparent;color:var(--neon);outline:none;font-family:var(--mono)}
+  input::placeholder{color: #6f9f7a}
+  button.btn{padding:10px 14px;border-radius:6px;border:none;background:var(--neon);color:#001;cursor:pointer;font-weight:700}
+  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--neon)}
+  small.muted{color:#6f9f7a}
+  .error{color:#ff7a7a}
+  .success{color:#aaffc0}
+  /* table */
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{padding:8px;border-bottom:1px dashed rgba(0,255,106,0.04);text-align:left;font-size:14px}
+  .table-actions a{color:var(--accent);cursor:pointer;text-decoration:underline;margin-right:6px}
+  .cards{display:flex;gap:12px;flex-wrap:wrap}
+  .card{flex:1 1 220px;padding:18px;border-radius:8px;background:rgba(0,0,0,0.55);border:1px solid rgba(0,255,106,0.04)}
+  .search-row{display:flex;gap:8px;align-items:center}
+  @media(max-width:800px){.nav-buttons{display:none}.auth-grid{flex-direction:column}}
+  /* binary overlay */
+  .binary{font-size:12px;opacity:0.06;position:absolute;right:10px;top:12px}
+  footer{margin-top:18px;text-align:center;color:#7fffb3;font-size:13px}
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="nav">
+    <div class="brand">ANJELO WEBSITE (GOVERMENT ANTI CURRUPTION) — <small class="muted">LOCAL SERVER</small></div>
+    <div class="nav-buttons" id="topButtons">
+      <!-- Buttons updated by JS based on auth -->
+      <button onclick="showPage('home')">Home</button>
+      <button onclick="showPage('employees')">Employees</button>
+      <button onclick="showPage('viewdb')">Database</button>
+      <button onclick="showPage('reports')">Reports</button>
+      <button onclick="showPage('about')">About</button>
+      <button id="btn-logout" class="ghost" onclick="logout()" style="display:none">Logout</button>
+    </div>
+  </header>
+
+  <main class="main-card">
+    <div class="binary">0101010101010101010101010101</div>
+
+    <!-- LOGIN -->
+    <section id="loginPage">
+      <div class="auth-grid">
+        <div class="box" style="min-width:320px">
+          <h2>Sign In</h2>
+          <div id="loginError" class="error"></div>
+          <input id="loginUser" placeholder="Username or Email" />
+          <input id="loginPass" placeholder="Password" type="password" />
+          <div style="display:flex;gap:8px">
+            <button class="btn" onclick="handleLogin()">Login</button>
+            <button class="ghost" onclick="showPage('register')">Register</button>
+          </div>
+          <small class="muted">3 attempts only</small>
+        </div>
+
+        <div class="box">
+          <h3>Why anti CURRUPTION?</h3>
+          <p>This was done for governments that take advantage of taxes so that local workers know how much they earn and how much is deducted from them weekly and monthly. (LOCAL server).</p>
+          <ul>
+            <li>FILIPINO WORKER SALARY RECORDS</li>
+            <li>Client-side (localStorage)</li>
+            <li>Employee REGISTER,RECORD,MANUAL,INPUT DISPLAY SUMMARY  RECORD + search BAR</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- REGISTER -->
+    <section id="registerPage" class="hidden">
+      <h2>Register Account</h2>
+      <div id="regMsg"></div>
+      <div class="box" style="max-width:700px">
+        <label>First name</label><input id="regFirst" placeholder="First name" />
+        <label>Last name</label><input id="regLast" placeholder="Last name" />
+        <label>Email</label><input id="regEmail" placeholder="email@example.com" />
+        <label>Username</label><input id="regUser" placeholder="Username" />
+        <label>Password</label><input id="regPass" placeholder="Password" type="password" />
+        <label>Birthday</label><input id="regBday" type="date" 
+        <label>Gender</label>
+        <select id="regGender"><option value="">--Select--</option><option>Male</option><option>Female</option></select>
+        <label>Address</label><input id="regAddress" placeholder="Address" />
+        <label>Contact number</label><input id="regContact" placeholder="Contact number" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" onclick="handleRegister()">Create Account</button>
+          <button class="ghost" onclick="showPage('login')">Back to Login</button>
+        </div>
+        <small class="muted">Registered users appear in Database page. Default role = staff. Admin role can be toggled in settings.</small>
+      </div>
+    </section>
+
+    <!-- HOME -->
+    <section id="homePage" class="hidden">
+      <h1>RECORD DETAILS MANAGER SETTING</h1>
+      <p id="homeWelcome"></p>
+      <div class="cards">
+        <div class="card"><h3>Employees</h3><p>Manage employee payroll, taxes, and net salary.</p><button class="btn" onclick="showPage('employees')">Open</button></div>
+        <div class="card"><h3>Reports</h3><p>Generate simple payroll summary and tax collection.</p><button class="btn" onclick="showPage('reports')">Reports</button></div>
+        <div class="card"><h3>About</h3><p>Information about the system and creator.</p><button class="btn" onclick="showPage('about')">View</button></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="aboutPage" class="hidden">
+      <h1>About This Website</h1>
+      <p><strong></strong>I DID THIS SO THAT THERE IS NO CORRUPTION IN TAXES AND THERE IS EQUALITY IN THE SALARY OF FILIPINO WORKERS.. Creator: <strong>ANJELO BALLESTEROS</strong> </p>
+      <h3>Program Functionality</h3>
+      <ul>
+        <li>DOWNLOAD EXPORT FILES RECORD</li>
+        <li>Login & Registration</li>
+        <li>Database storage (localStorage) and display</li>
+        <li>employees and update data</li>
+        <li>Easy sending public and private host address</li>
+        <li>CAN FILL UP MORE RECORD WITH NO LIMIT</li>
+        <h3>Anjelo Ballesteros is a church member whose only desire is to help people who are being oppressed, so he created the anti-corruption system for employees who want to see their salary records and have a free way to check if what is being deducted from them is correct and how much they are being paid. This was especially done for construction workers, senior ID makers, and painters who are under the salary of government employees, against the leaders or head offices who are always being cheated of their salaries.He also wants to be a teacher like his father, a retired teacher. Even though they are poor, they will be able to cover their expenses with the help of their family's solidarity. He is diligent in doing things that are beneficial to helping people because as a church member, he claims that God has given him the power to help the poor or people who are always fooled by the government. He also teaches discipline and dedication in work.</h3>
+        <h3>WARNING!</h3>
+        <H3>THESE FILES CAN BE DELETED IF YOU ARE NOT CAREFUL ABOUT USING THEM BECAUSE THERE IS A DELETE BUTTON TO DELETE FILES THAT CANNOT BE USED ANYMORE OR TO AVOID CONFUSION, THE DELETE BUTTON IS MINTED TO USE IT PROPERLY. PLEASE DO NOT USE THE FILES FOR FRAUD OR ANY FILES THAT WILL PROVIDE FAKE DOCUMENTS. THIS ANTI-CIRRUPTION WEBSITE WAS MADE FOR PEOPLE WHO CANNOT KNOW HOW THEIR SALARY IS BEING REDUCED MONTHLY, DAILY OR WEEKLY AND TO SAVE THE MONEY THAT THEY ARE HARD WORKING FOR.</H3>
+        <h3>TIPS FOR USER</h3>
+        <H3>-DONT FORGET TO REGISTER AFTER LOG IN</H3>
+        <H3>-CHECK THE RECORD</H3>
+        <H3>-DONT FORGET TO LOG OUT</H3>
+        <H3>-DONT FORGET TO DOWNLOAD FILES CLICK EMPLOYEE AND CLICK EXPORT JILO FILES TO SEND TO OTHER PUBLIC/PRIVATE HOST</H3>
+        <h3>-The database is to be able to store multiple accounts so that the user does not have difficulty choosing which account to use.</h3>
+        <h3>-The report can be used to allow the user to see all employees' total tax income.</h3>
+      </ul>
+    </section>
+
+    <!-- EMPLOYEES LIST -->
+    <section id="employeesPage" class="hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>Employees & Payroll</h2>
+        <div>
+          <button class="btn" onclick="showPage('addEmployee')">Add Employee</button>
+          <button class="ghost" onclick="exportData()">Export JILO FILES</button>
+        </div>
+      </div>
+
+      <div class="search-row" style="margin-top:8px">
+        <input id="empSearch" placeholder="Search by ID, name, department..." oninput="renderEmployees()" />
+        <select id="empFilter" onchange="renderEmployees()">
+          <option value="">Filter: All Depts</option>
+        </select>
+        <select id="sortBy" onchange="renderEmployees()">
+          <option value="created_desc">Newest</option>
+          <option value="salary_desc">Salary (High)</option>
+          <option value="salary_asc">Salary (Low)</option>
+        </select>
+      </div>
+
+      <table id="empTable" style="margin-top:12px">
+        <thead><tr><th>Emp ID</th><th>Name</th><th>Position</th><th>Dept</th><th>Salary</th><th>Tax %</th><th>Net Salary</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- ADD EMPLOYEE -->
+    <section id="addEmployeePage" class="hidden">
+      <h2>Add Employee</h2>
+      <div class="box" style="max-width:700px">
+        <label>Employee ID</label><input id="add_eid" placeholder="E001" />
+        <label>First name</label><input id="add_fn" placeholder="First name" />
+        <label>Last name</label><input id="add_ln" placeholder="Last name" />
+        <label>Position</label><input id="add_pos" placeholder="Position" />
+        <label>Department</label><input id="add_dept" placeholder="Department" />
+        <label>Salary</label><input id="add_salary" type="number" placeholder="0.00" />
+        <label>Tax %</label><input id="add_tax" type="number" step="0.01" placeholder="e.g., 12.50" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" onclick="addEmployee()">Add</button>
+          <button class="ghost" onclick="showPage('employees')">Cancel</button>
+        </div>
+        <div id="addEmpMsg"></div>
+      </div>
+    </section>
+
+    <!-- EDIT EMPLOYEE -->
+    <section id="editEmployeePage" class="hidden">
+      <h2>Edit Employee</h2>
+      <div class="box" style="max-width:700px">
+        <input id="edit_id" type="hidden" />
+        <label>First name</label><input id="edit_fn" />
+        <label>Last name</label><input id="edit_ln" />
+        <label>Position</label><input id="edit_pos" />
+        <label>Department</label><input id="edit_dept" />
+        <label>Salary</label><input id="edit_salary" type="number" />
+        <label>Tax %</label><input id="edit_tax" type="number" step="0.01" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" onclick="saveEditEmployee()">Save</button>
+          <button class="ghost" onclick="showPage('employees')">Cancel</button>
+        </div>
+        <div id="editEmpMsg"></div>
+      </div>
+    </section>
+
+    <!-- VIEW EMPLOYEE -->
+    <section id="viewEmployeePage" class="hidden">
+      <h2>Employee Details</h2>
+      <div class="box" id="viewEmpDetails"></div>
+      <div style="margin-top:8px"><button class="ghost" onclick="showPage('employees')">Back</button></div>
+    </section>
+
+    <!-- DATABASE (users) VIEW -->
+    <section id="viewdbPage" class="hidden">
+      <h2>Registered Users</h2>
+      <div class="search-row">
+        <input id="userSearch" placeholder="Search users..." oninput="renderUsers()" />
+        <button class="ghost" onclick="clearUsers()">Reset</button>
+      </div>
+      <table id="usersTable">
+        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Username</th><th>Role</th><th>Created</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="reportsPage" class="hidden">
+      <h2>Reports</h2>
+      <div class="card">
+        <h3>Consolidated Worker Record TotalNet</h3>
+        <div id="reportSummary"></div>
+        <div style="margin-top:8px"><button class="btn" onclick="generateReport()">Generate</button></div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settingsPage" class="hidden">
+      <h2>Account Settings</h2>
+      <div class="box" style="max-width:500px">
+        <label>New Password</label><input id="newPass" type="password" />
+        <label>Confirm New Password</label><input id="newPass2" type="password" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" onclick="changePassword()">Change Password</button>
+        </div>
+        <div id="settingsMsg"></div>
+        <hr style="border-color:rgba(0,255,106,0.03)">
+        <button class="ghost" onclick="toggleAdmin()">Toggle My Role (admin/staff)</button>
+        <div id="roleMsg"></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contactPage" class="hidden">
+      <h2>Contact & Notes</h2>
+      <p>Use this simulated app for learning. For production, replace localStorage with server-side DB (MySQL/MariaDB) and secure server auth.</p>
+      <p>Contact: <strong>ANJELOPARINGITBALLESTEROS@example.com</strong> (example)</p>
+    </section>
+
+  </main>
+
+  <footer>
+    <small>PAYROLL TAX GOVERMENT ANTI CURRUPTION • <span id="localTime"></span></small>
+  </footer>
+</div>
+
+<script>
+/* ========= Utilities ========= */
+const LS_USERS = 'epayroll_users_v1';
+const LS_EMPLOYEES = 'epayroll_employees_v1';
+const SESSION_ATTEMPTS = 'epayroll_attempts_session';
+
+// helpers
+function nowISO(){ return new Date().toISOString(); }
+function uid(){return 'id'+Math.random().toString(36).slice(2,9);}
+
+// Crypto: SHA-256 -> hex
+async function sha256Hex(message){
+  const enc = new TextEncoder();
+  const data = enc.encode(message);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  const h = Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  return h;
+}
+
+/* ========= Persistence ========= */
+function readUsers(){ return JSON.parse(localStorage.getItem(LS_USERS) || '[]'); }
+function writeUsers(u){ localStorage.setItem(LS_USERS, JSON.stringify(u)); }
+function readEmployees(){ return JSON.parse(localStorage.getItem(LS_EMPLOYEES) || '[]'); }
+function writeEmployees(e){ localStorage.setItem(LS_EMPLOYEES, JSON.stringify(e)); }
+
+/* ========= Bootstrap seed (first-run) ========= */
+function seedIfEmpty(){
+  if(readUsers().length===0){
+    // create default admin (password: Admin@123)
+    sha256Hex('Admin@123').then(h=>{
+      const admin = {id:uid(), firstname:'Anjelo', lastname:'Ballesteros', email:'ANJELOLABAN82@gov.local', username:'admin', password:h, birthday:null, gender:'Male', address:'HEAD PROGRAM Office', contact_number:'09778273961', role:'admin', created_at: nowISO()};
+      const ulist = [admin];
+      writeUsers(ulist);
+    });
+  }
+  if(readEmployees().length===0){
+    const sample = [
+      {id:uid(), employee_id:'GOV001', firstname:'Juan', lastname:'Dela Cruz', position:'Clerk', department:'Tax', salary:20000, tax_percent:12.5, net_salary:20000 - (20000*12.5/100), created_at: nowISO()},
+      {id:uid(), employee_id:'GOV002', firstname:'Maria', lastname:'Santos', position:'Enforcer', department:'Audit', salary:30000, tax_percent:15.0, net_salary:30000 - (30000*15/100), created_at: nowISO()},
+    ];
+    writeEmployees(sample);
+  }
+}
+
+/* ========= UI & Auth ========= */
+let currentUser = null;
+
+function showPage(key){
+  // pages mapping
+  const pages = {
+    login:'loginPage', register:'registerPage', home:'homePage', about:'aboutPage',
+    employees:'employeesPage', addEmployee:'addEmployeePage', editEmployee:'editEmployeePage', viewEmployee:'viewEmployeePage',
+    viewdb:'viewdbPage', reports:'reportsPage', settings:'settingsPage', contact:'contactPage'
+  };
+  // hide all
+  Object.values(pages).forEach(id=>document.getElementById(id).classList.add('hidden'));
+  // show selected
+  const id = pages[key] || 'homePage';
+  document.getElementById(id).classList.remove('hidden');
+
+  // adjustments
+  if(key==='home'){ renderHome(); }
+  if(key==='employees'){ populateFilters(); renderEmployees(); }
+  if(key==='viewdb'){ renderUsers(); }
+  if(key==='reports'){ renderReportSummary(); }
+}
+
+function updateTopButtons(){
+  const logged = !!currentUser;
+  document.getElementById('btn-logout').style.display = logged ? 'inline-block' : 'none';
+  // show/hide pages that require auth
+  if(!logged){
+    showPage('login'); // force login if not logged
+  } else {
+    showPage('home');
+  }
+}
+
+function renderHome(){
+  document.getElementById('homeWelcome').innerText = currentUser ? `Hello ${currentUser.firstname} ${currentUser.lastname} (${currentUser.role}) — Manage payroll and taxes.` : 'Please login.';
+}
+
+/* ========= Registration & Login ========= */
+async function handleRegister(){
+  const firstname = document.getElementById('regFirst').value.trim();
+  const lastname = document.getElementById('regLast').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const username = document.getElementById('regUser').value.trim();
+  const password = document.getElementById('regPass').value;
+  if(!email || !username || !password){ document.getElementById('regMsg').innerHTML = '<p class="error">Please fill required fields.</p>'; return; }
+  const users = readUsers();
+  if(users.find(u => u.username === username || u.email === email)){
+    document.getElementById('regMsg').innerHTML = '<p class="error">Username or email already exists.</p>'; return;
+  }
+  const hash = await sha256Hex(password);
+  const u = {
+    id: uid(),
+    firstname, lastname, email, username, password: hash,
+    birthday: document.getElementById('regBday').value || null,
+    gender: document.getElementById('regGender').value || null,
+    address: document.getElementById('regAddress').value || null,
+    contact_number: document.getElementById('regContact').value || null,
+    role: 'staff',
+    created_at: nowISO()
+  };
+  users.unshift(u);
+  writeUsers(users);
+  document.getElementById('regMsg').innerHTML = '<p class="success">Registration successful. You can login now.</p>';
+  // clear form
+  ['regFirst','regLast','regEmail','regUser','regPass','regBday','regGender','regAddress','regContact'].forEach(id=>document.getElementById(id).value='');
+  // go to login after small delay
+  setTimeout(()=>{ showPage('login'); }, 900);
+}
+
+async function handleLogin(){
+  const query = document.getElementById('loginUser').value.trim();
+  const password = document.getElementById('loginPass').value;
+  const attempts = Number(sessionStorage.getItem(SESSION_ATTEMPTS) || 0);
+  if(attempts >= 3){ document.getElementById('loginError').innerText = 'Too many attempts. Reload page to try again later.'; return; }
+  if(!query || !password){ document.getElementById('loginError').innerText = 'Fill username/email and password.'; return; }
+  const users = readUsers();
+  const user = users.find(u => u.username === query || u.email === query);
+  if(!user){ sessionStorage.setItem(SESSION_ATTEMPTS, attempts+1); document.getElementById('loginError').innerText = `Invalid credentials. Attempts left: ${2 - attempts}`; return; }
+  const hash = await sha256Hex(password);
+  if(hash === user.password){
+    currentUser = user;
+    sessionStorage.setItem('epayroll_current_user', JSON.stringify(user)); // persist per-tab
+    sessionStorage.removeItem(SESSION_ATTEMPTS);
+    document.getElementById('loginError').innerText = '';
+    document.getElementById('loginUser').value=''; document.getElementById('loginPass').value='';
+    // show nav buttons & home
+    document.getElementById('topButtons').style.display = 'flex';
+    document.getElementById('btn-logout').style.display = 'inline-block';
+    renderHome();
+    showPage('home');
+    updateTopButtons();
+  } else {
+    sessionStorage.setItem(SESSION_ATTEMPTS, attempts+1);
+    const left = 2 - attempts;
+    document.getElementById('loginError').innerText = `Invalid credentials. Attempts left: ${left}`;
+  }
+}
+
+function logout(){
+  currentUser = null;
+  sessionStorage.removeItem('epayroll_current_user');
+  document.getElementById('btn-logout').style.display = 'none';
+  showPage('login');
+}
+
+/* ========= Employee CRUD ========= */
+function addEmployee(){
+  const eid = document.getElementById('add_eid').value.trim();
+  const fn = document.getElementById('add_fn').value.trim();
+  const ln = document.getElementById('add_ln').value.trim();
+  const pos = document.getElementById('add_pos').value.trim();
+  const dept = document.getElementById('add_dept').value.trim();
+  const salary = parseFloat(document.getElementById('add_salary').value) || 0;
+  const tax = parseFloat(document.getElementById('add_tax').value) || 0;
+  if(!eid || !fn || !ln){ document.getElementById('addEmpMsg').innerHTML = '<p class="error">Employee ID and name required.</p>'; return; }
+  const employees = readEmployees();
+  if(employees.find(e => e.employee_id === eid)){ document.getElementById('addEmpMsg').innerHTML = '<p class="error">Employee ID already exists.</p>'; return; }
+  const net = salary - (salary * tax / 100);
+  const emp = {id: uid(), employee_id: eid, firstname: fn, lastname: ln, position: pos, department: dept, salary: Number(salary), tax_percent: Number(tax), net_salary: Number(net), created_at: nowISO()};
+  employees.unshift(emp);
+  writeEmployees(employees);
+  document.getElementById('addEmpMsg').innerHTML = '<p class="success">Employee added.</p>';
+  // clear
+  ['add_eid','add_fn','add_ln','add_pos','add_dept','add_salary','add_tax'].forEach(id=>document.getElementById(id).value='');
+  populateFilters(); renderEmployees();
+  setTimeout(()=>showPage('employees'),700);
+}
+
+function renderEmployees(){
+  const tbody = document.querySelector('#empTable tbody');
+  const q = document.getElementById('empSearch').value.toLowerCase();
+  const filter = document.getElementById('empFilter').value;
+  const sort = document.getElementById('sortBy').value;
+  let rows = readEmployees();
+  if(q){
+    rows = rows.filter(r => (r.employee_id||'').toLowerCase().includes(q) || (r.firstname+' '+r.lastname).toLowerCase().includes(q) || (r.department||'').toLowerCase().includes(q));
+  }
+  if(filter){ rows = rows.filter(r => r.department === filter); }
+  if(sort==='salary_desc'){ rows.sort((a,b)=>b.salary - a.salary); }
+  else if(sort==='salary_asc'){ rows.sort((a,b)=>a.salary - b.salary); }
+  else { rows.sort((a,b)=> new Date(b.created_at) - new Date(a.created_at)); }
+
+  tbody.innerHTML = rows.map(r=>`
+    <tr>
+      <td>${escapeHTML(r.employee_id)}</td>
+      <td>${escapeHTML(r.firstname+' '+r.lastname)}</td>
+      <td>${escapeHTML(r.position)}</td>
+      <td>${escapeHTML(r.department)}</td>
+      <td>${numberFormat(r.salary)}</td>
+      <td>${r.tax_percent}%</td>
+      <td>${numberFormat(r.net_salary)}</td>
+      <td class="table-actions">
+        <a onclick="viewEmployee('${r.id}')">View</a>
+        <a onclick="startEditEmployee('${r.id}')">Edit</a>
+        <a onclick="deleteEmployee('${r.id}')" style="color:#ff7a7a">Delete</a>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function populateFilters(){
+  const select = document.getElementById('empFilter');
+  const depts = Array.from(new Set(readEmployees().map(e=>e.department).filter(Boolean)));
+  select.innerHTML = '<option value="">Filter: All Depts</option>' + depts.map(d=>`<option value="${escapeHTML(d)}">${escapeHTML(d)}</option>`).join('');
+}
+
+function startEditEmployee(id){
+  const e = readEmployees().find(x=>x.id===id);
+  if(!e) return alert('Not found');
+  document.getElementById('edit_id').value = id;
+  document.getElementById('edit_fn').value = e.firstname;
+  document.getElementById('edit_ln').value = e.lastname;
+  document.getElementById('edit_pos').value = e.position;
+  document.getElementById('edit_dept').value = e.department;
+  document.getElementById('edit_salary').value = e.salary;
+  document.getElementById('edit_tax').value = e.tax_percent;
+  showPage('editEmployee');
+}
+
+function saveEditEmployee(){
+  const id = document.getElementById('edit_id').value;
+  const fn = document.getElementById('edit_fn').value.trim();
+  const ln = document.getElementById('edit_ln').value.trim();
+  const pos = document.getElementById('edit_pos').value.trim();
+  const dept = document.getElementById('edit_dept').value.trim();
+  const salary = parseFloat(document.getElementById('edit_salary').value) || 0;
+  const tax = parseFloat(document.getElementById('edit_tax').value) || 0;
+  const employees = readEmployees();
+  const idx = employees.findIndex(x=>x.id===id);
+  if(idx===-1) { document.getElementById('editEmpMsg').innerHTML = '<p class="error">Employee not found.</p>'; return; }
+  employees[idx].firstname = fn; employees[idx].lastname = ln; employees[idx].position = pos; employees[idx].department = dept;
+  employees[idx].salary = Number(salary); employees[idx].tax_percent = Number(tax); employees[idx].net_salary = Number(salary - salary * tax / 100);
+  writeEmployees(employees);
+  document.getElementById('editEmpMsg').innerHTML = '<p class="success">Saved.</p>';
+  renderEmployees();
+  setTimeout(()=>showPage('employees'),600);
+}
+
+function viewEmployee(id){
+  const e = readEmployees().find(x=>x.id===id);
+  if(!e) return alert('Not found');
+  const html = `
+    <h3>${escapeHTML(e.firstname + ' ' + e.lastname)} (${escapeHTML(e.employee_id)})</h3>
+    <p><strong>Position:</strong> ${escapeHTML(e.position)} | <strong>Dept:</strong> ${escapeHTML(e.department)}</p>
+    <p><strong>Salary:</strong> ${numberFormat(e.salary)} | <strong>Tax %:</strong> ${e.tax_percent}%</p>
+    <p><strong>Net Salary:</strong> ${numberFormat(e.net_salary)}</p>
+    <p><small class="muted">Added: ${e.created_at}</small></p>
+  `;
+  document.getElementById('viewEmpDetails').innerHTML = html;
+  showPage('viewEmployee');
+}
+
+function deleteEmployee(id){
+  if(!confirm('Delete employee? This cannot be undone in localStorage.')) return;
+  let arr = readEmployees();
+  arr = arr.filter(x=>x.id!==id);
+  writeEmployees(arr);
+  renderEmployees();
+}
+
+/* ========= Users display & actions ========= */
+function renderUsers(){
+  const tbody = document.querySelector('#usersTable tbody');
+  const q = document.getElementById('userSearch').value.toLowerCase();
+  let users = readUsers();
+  if(q) users = users.filter(u => (u.firstname+' '+u.lastname).toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q) || (u.username||'').toLowerCase().includes(q));
+  tbody.innerHTML = users.map(u=>`
+    <tr>
+      <td>${escapeHTML(u.id)}</td>
+      <td>${escapeHTML(u.firstname+' '+u.lastname)}</td>
+      <td>${escapeHTML(u.email)}</td>
+      <td>${escapeHTML(u.username)}</td>
+      <td>${escapeHTML(u.role)}</td>
+      <td>${escapeHTML(u.created_at)}</td>
+      <td><a onclick="impersonateUser('${u.id}')">Impersonate</a> <a onclick="deleteUser('${u.id}')" style="color:#ff7a7a">Delete</a></td>
+    </tr>
+  `).join('');
+}
+
+function deleteUser(id){
+  if(!confirm('Delete user?')) return;
+  let u = readUsers().filter(x=>x.id!==id);
+  writeUsers(u);
+  renderUsers();
+}
+
+function impersonateUser(id){
+  if(!confirm('Impersonate this user (you become them in the client)?')) return;
+  const u = readUsers().find(x=>x.id===id);
+  if(!u) return alert('Not found');
+  currentUser = u;
+  sessionStorage.setItem('epayroll_current_user', JSON.stringify(u));
+  alert('You are now impersonating ' + u.username);
+  updateTopButtons();
+}
+
+/* ========= Reports ========= */
+function generateReport(){
+  const emps = readEmployees();
+  const totalSalary = emps.reduce((s,e)=>s + Number(e.salary || 0), 0);
+  const totalTax = emps.reduce((s,e)=>s + (Number(e.salary || 0) * Number(e.tax_percent || 0) / 100), 0);
+  const totalNet = emps.reduce((s,e)=>s + Number(e.net_salary || 0), 0);
+  document.getElementById('reportSummary').innerHTML = `
+    <p>Total employees: <strong>${emps.length}</strong></p>
+    <p>Total Gross Salary: <strong>${numberFormat(totalSalary)}</strong></p>
+    <p>Total Tax Collected (estimate): <strong>${numberFormat(totalTax)}</strong></p>
+    <p>Total Net Salaries: <strong>${numberFormat(totalNet)}</strong></p>
+  `;
+}
+
+function renderReportSummary(){ generateReport(); }
+
+/* ========= Settings ========= */
+async function changePassword(){
+  const np = document.getElementById('newPass').value;
+  const np2 = document.getElementById('newPass2').value;
+  if(!currentUser) return alert('Not logged in');
+  if(!np || np !== np2){ document.getElementById('settingsMsg').innerHTML = '<p class="error">Passwords empty or do not match.</p>'; return; }
+  const users = readUsers();
+  const idx = users.findIndex(u=>u.id===currentUser.id);
+  users[idx].password = await sha256Hex(np);
+  writeUsers(users);
+  document.getElementById('settingsMsg').innerHTML = '<p class="success">Password changed.</p>';
+  document.getElementById('newPass').value=''; document.getElementById('newPass2').value='';
+}
+
+function toggleAdmin(){
+  if(!currentUser) return;
+  const users = readUsers();
+  const idx = users.findIndex(u=>u.id===currentUser.id);
+  users[idx].role = users[idx].role === 'admin' ? 'staff' : 'admin';
+  writeUsers(users);
+  currentUser = users[idx];
+  sessionStorage.setItem('epayroll_current_user', JSON.stringify(currentUser));
+  document.getElementById('roleMsg').innerHTML = `<p class="success">Role is now ${currentUser.role}.</p>`;
+  renderHome();
+}
+
+/* ========= Misc ========= */
+function escapeHTML(s){ if(!s && s!==0) return ''; return String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function numberFormat(n){ return Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function clearUsers(){ localStorage.removeItem(LS_USERS); seedIfEmpty(); renderUsers(); alert('Users reset to initial seed.'); }
+function exportData(){ const data = {users: readUsers(), employees: readEmployees()}; const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'epayroll_export.json'; a.click(); URL.revokeObjectURL(url); }
+
+/* ========= Init ========= */
+function loadSessionUser(){
+  const s = sessionStorage.getItem('epayroll_current_user');
+  if(s){
+    try { currentUser = JSON.parse(s); } catch(e){ currentUser = null; }
+  }
+}
+function init(){
+  seedIfEmpty();
+  loadSessionUser();
+  document.getElementById('localTime').innerText = new Date().toLocaleString();
+  // top buttons visible only when logged in
+  if(currentUser){
+    document.getElementById('topButtons').style.display = 'flex';
+    document.getElementById('btn-logout').style.display = 'inline-block';
+  } else {
+    document.getElementById('topButtons').style.display = 'flex';
+    document.getElementById('btn-logout').style.display = 'none';
+  }
+  if(currentUser) renderHome();
+  // show appropriate start page
+  if(currentUser) showPage('home'); else showPage('login');
+  // update department filter
+  populateFilters();
+}
+window.addEventListener('load', init);
+
+/* ========= Small helpers for demo ========= */
+function impersonateFirstUser(){ const u=readUsers()[0]; currentUser=u; sessionStorage.setItem('epayroll_current_user', JSON.stringify(u)); updateTopButtons(); renderHome(); }
+</script>
+</body>
+</html>
+
